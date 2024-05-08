@@ -2,14 +2,20 @@ import streamlit as st
 from views.howitworks import how_it_works
 from views.recommender import list_top_recommendations, movie_recommendation
 import pandas as pd
+import os
 
 
 def main():
     page = st.sidebar.radio("Navigation", ("Movie Recommendations", "How It Works"))
 
-    dataset = pd.read_csv(
-        r"C:\Users\athar\OneDrive\Desktop\DEV\MovieRec\model\cleaned_dataset.csv"
-    )
+    # Get the current directory
+    current_dir = os.path.dirname(__file__) if "__file__" in locals() else os.getcwd()
+
+    # Construct the file path relative to the current directory
+    file_path = os.path.join(current_dir, "./model/cleaned_dataset.csv")
+
+    # Load the dataset
+    dataset = pd.read_csv(file_path)
 
     if page == "Movie Recommendations":
         st.title("Movie Recommendation System")
