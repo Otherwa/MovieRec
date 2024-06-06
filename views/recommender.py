@@ -1,6 +1,15 @@
 import streamlit as st
 import pandas as pd
 import os
+from dotenv import load_dotenv
+import requests
+
+load_dotenv()
+
+# TMDb API key
+API_KEY = os.getenv("API_KEY")
+TMDB_API_URL = "https://api.themoviedb.org/3/search/movie"
+TMDB_IMAGE_URL = "http://image.tmdb.org/t/p/w500/"
 
 
 def calculate_num_ratings(dataset):
@@ -94,16 +103,21 @@ def list_top_recommendations(rec_movies, dataset):
 
     return unique_df
 
-    merged_dataset = pd.merge(rec_movies, dataset, on="title", how="left")
 
-    merged_dataset.reset_index(inplace=True)
+def fetch_poster_url(movie_title):
+    """
+    Fetches the poster URL for a given movie title from TMDb API.
 
-    # Grouping by 'title' column
-    grouped_df = merged_dataset.groupby("title")
+    Parameters:
+    - movie_title (str): The title of the movie.
 
-    # Getting only one row for each unique title
-    unique_df = grouped_df.first().reset_index()
-
-    unique_df.drop(columns=["userId"], inplace=True)
-
-    return unique_df
+    Returns:
+    - str: The URL of the movie poster.
+    """
+    params = {"api_key": API_KEY, "query": movie_title}
+    response = requests.get(TMDB_API_URL, params=params).json()
+    if response["results"]:
+        poster_path = response["results"][0].get("poster_path")
+        if poster_path:
+            return TMDB_IMAGE_URL + poster_path
+    return None

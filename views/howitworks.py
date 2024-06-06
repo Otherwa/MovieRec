@@ -1,75 +1,62 @@
 import streamlit as st
+from views.recommender import *
 
 
-def how_it_works():
+def how_it_works(dataset):
     st.title("How It Works")
 
     st.markdown("This page explains how our movie recommendation system functions.")
 
-    st.header("1. Data Loading and Exploration")
-    st.markdown(
-        """
-    - The system loads movie metadata and ratings data.
-    - It explores the datasets to understand their structure and content.
-    """
-    )
+    steps = [
+        (
+            "Data Loading and Exploration",
+            "The system loads and explores movie metadata and ratings data.",
+        ),
+        (
+            "Genre and Title Lists",
+            "Unique genres and movie titles are extracted and stored.",
+        ),
+        (
+            "Movie Ratings Analysis",
+            "Movies are analyzed based on average ratings and the number of ratings received.",
+        ),
+        (
+            "Movie Recommendation Function",
+            "A function recommends similar movies based on user ratings.",
+        ),
+        (
+            "Top Recommendations Listing Function",
+            "Another function lists top recommendations with additional details.",
+        ),
+        (
+            "Using Recommendation Functions",
+            "Users can specify a movie title for recommendations.",
+        ),
+    ]
 
-    st.header("2. Genre and Title Lists")
-    st.markdown(
-        """
-    - Unique genres and movie titles are extracted from the movies dataset.
-    - They are stored for further use.
-    """
-    )
+    for step, description in steps:
+        st.header(step)
+        st.markdown(description)
 
-    st.header("3. Movie Ratings Analysis")
-    st.markdown(
-        """
-    - Movies are analyzed based on their average ratings and the number of ratings received.
-    - Visualizations like heatmaps and joint plots help explore relationships between ratings and the number of ratings.
-    """
-    )
+    st.dataframe(dataset)
 
-    st.header("4. Movie Recommendation Function")
+    st.markdown("**Functions Used:**")
     st.markdown(
-        """
-    - A function called `movie_recommendation()` recommends similar movies based on user ratings.
-    - It calculates correlations between the selected movie and others.
-    - Movies with a minimum number of ratings are filtered out.
-    - Top recommended movies based on correlation are returned.
-    """
+        "- `calculate_num_ratings()`: Calculates the number of ratings for each movie title."
     )
-
-    st.header("5. Top Recommendations Listing Function")
+    st.write(calculate_num_ratings)
     st.markdown(
-        """
-    - Another function called `list_top_recommendations()` lists top recommendations with additional details.
-    - It merges recommended movies with the original dataset to get additional information.
-    - Unnecessary columns are removed, and only unique recommendations are returned.
-    """
+        "- `movie_recommendation()`: Recommends similar movies based on user ratings."
     )
-
-    st.header("6. Pickle File Usage")
+    st.write(movie_recommendation)
     st.markdown(
-        """
-    - The recommendation functions are saved into pickle files for later use.
-    """
+        "- `list_top_recommendations()`: Lists top recommendations with additional details."
     )
-
-    st.header("7. Loading Pickle Files")
+    st.write(list_top_recommendations)
     st.markdown(
-        """
-    - Pickle files containing the recommendation functions are loaded when needed.
-    """
+        "- `fetch_poster_url()`: Fetches the poster URL for a given movie title from the TMDb API."
     )
-
-    st.header("8. Using Recommendation Functions")
-    st.markdown(
-        """
-    - Users can specify a movie title for which recommendations are needed.
-    - The recommendation functions are called to get recommendations based on the specified movie title.
-    """
-    )
+    st.write(fetch_poster_url)
 
 
 if __name__ == "__main__":
