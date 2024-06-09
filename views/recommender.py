@@ -1,5 +1,3 @@
-import numpy as np
-from sklearn.metrics import mean_squared_error
 import streamlit as st
 import pandas as pd
 import os
@@ -50,15 +48,11 @@ def movie_recommendation(movie_title, dataset, rate_count):
     # Create a pivot table of movie ratings
     moviemat = dataset.pivot_table(index="userId", columns="title", values="rating")
 
-    print(moviemat)
-
     # Get ratings for the selected movie
     selected_movie_ratings = moviemat[movie_title]
 
     # Calculate correlation with other movies
     similar_movies = moviemat.corrwith(selected_movie_ratings)
-
-    print(similar_movies)
 
     # Create a DataFrame of correlations
     similar_movies = pd.DataFrame(similar_movies, columns=["Correlation"])
