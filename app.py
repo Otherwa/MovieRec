@@ -39,13 +39,11 @@ def main():
         # Button to trigger prediction
         if st.button("Get Recommendations"):
             # Get recommendations if data is loaded successfully
-            recommendations, accuracy = movie_recommendation(
+            recommendations = movie_recommendation(
                 movie_title,
                 dataset=dataset,
                 rate_count=rate_count,
             )
-
-            st.write(f"Accuracy {accuracy}")
 
             recommendations.reset_index(drop=True, inplace=True)
 
