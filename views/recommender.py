@@ -1,3 +1,5 @@
+import numpy as np
+from sklearn.metrics import mean_squared_error
 import streamlit as st
 import pandas as pd
 import os
@@ -78,7 +80,18 @@ def movie_recommendation(movie_title, dataset, rate_count):
     # Sort by correlation
     similar_movies = similar_movies.sort_values("Correlation", ascending=False)
 
-    return similar_movies.head(10)
+    # Accuracy
+    test_set = dataset.sample(frac=0.2)  # Example: Using 20% of data as test set
+
+    # Make recommendations for each movie in the test set
+    recommendations = []
+    for movie in test_set["title"]:
+        recommendations.append(movie_recommendation(movie, dataset, rate_count))
+
+    # Calculate RMSE
+    rmse = np.sqrt(mean_squared_error(test_set["rating"], recommendations))
+
+    return similar_movies.head(10), rmse
 
 
 def list_top_recommendations(rec_movies, dataset):
