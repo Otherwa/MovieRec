@@ -2,6 +2,7 @@ import streamlit as st
 from views.howitworks import how_it_works
 from views.recommender import (
     fetch_poster_url,
+    fetch_streaming_sites,
     list_top_recommendations,
     movie_recommendation,
 )
@@ -58,7 +59,7 @@ def main():
                 with cols[index % 3]:
                     # Fetch poster image URL
                     image = fetch_poster_url(row["title"])
-
+                    streams = fetch_streaming_sites(row["title"])
                     # IMDb URL
                     imdb_url = f"https://www.imdb.com/find?q={row['title'].replace(' ', '+')}&s=tt"
 
@@ -69,6 +70,8 @@ def main():
                             {'<img src="' + image + '" style="width:100%; border-radius: 10px;" />' if image else ''}
                             <h3>{row["title"]}</h3>
                             <h6><a href="{imdb_url}" target="_blank" rel="noopener noreferrer">Reviews</a></h6>
+                            <h6><a href="{streams['Netflix']}" target="_blank" rel="noopener noreferrer">Find on Netflix</a> 🍿</h6>
+                            <h6><a href="{streams['Amazon Prime']}" target="_blank" rel="noopener noreferrer">Find on Amazon Prime</a> 🎞️</h6>
                             <p><b>Rating:</b> {row['rating']}</p>
                             <p><b>Runtime:</b> {row['runtime']}</p>
                             <div style="max-height: 200px; overflow-y: auto;">

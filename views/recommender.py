@@ -48,11 +48,15 @@ def movie_recommendation(movie_title, dataset, rate_count):
     # Create a pivot table of movie ratings
     moviemat = dataset.pivot_table(index="userId", columns="title", values="rating")
 
+    print(moviemat)
+
     # Get ratings for the selected movie
     selected_movie_ratings = moviemat[movie_title]
 
     # Calculate correlation with other movies
     similar_movies = moviemat.corrwith(selected_movie_ratings)
+
+    print(similar_movies)
 
     # Create a DataFrame of correlations
     similar_movies = pd.DataFrame(similar_movies, columns=["Correlation"])
@@ -121,3 +125,26 @@ def fetch_poster_url(movie_title):
         if poster_path:
             return TMDB_IMAGE_URL + poster_path
     return None
+
+
+def fetch_streaming_sites(movie_title):
+    """
+    Fetches streaming sites search results for a given movie title.
+
+    Parameters:
+    - movie_title (str): The title of the movie.
+
+    Returns:
+    - dict: A dictionary containing streaming sites and their respective URLs.
+    """
+    streaming_sites = {}
+
+    # Perform search on Netflix
+    netflix_url = f"https://www.netflix.com/search?q={movie_title}"
+    streaming_sites["Netflix"] = netflix_url
+
+    # Perform search on Amazon Prime
+    amazon_url = f"https://www.primevideo.com/search?phrase={movie_title}"
+    streaming_sites["Amazon Prime"] = amazon_url
+
+    return streaming_sites
